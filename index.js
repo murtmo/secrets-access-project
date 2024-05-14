@@ -11,15 +11,15 @@ const app = express();
 const port = 3000;
 const correctPassword = "ILoveProgramming";
 
-var correctFlg = false;
+var userIsAuthorised = false;
 
 function checkPassword(req, res, next) {
   var inputedPass = req.body.password;
   console.log(inputedPass);
   if(correctPassword === inputedPass) {
-    correctFlg = true;
+    userIsAuthorised = true;
   } else {
-    correctFlg = false;
+    userIsAuthorised = false;
   }
   next();
 }
@@ -33,12 +33,12 @@ app.get("/", (req, res) => {
 app.use(checkPassword);
 
 app.post("/check", (req, res, next) => {
-  if(correctFlg) {
+  if(userIsAuthorised) {
     console.log("correct!");
     res.sendFile(__dirname + "/public/secret.html");
   } else {
     console.log("incorrect...");
-    res.sendFile(__dirname + "/public/index.html");
+    res.redirect("/");
   }
 })
 
